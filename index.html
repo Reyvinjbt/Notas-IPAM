@@ -1,135 +1,127 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Instituto Privado Adventista Matagalpa</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div id="loginScreen" class="auth-screen">
-      <div class="auth-card">
-        <h1>Instituto Privado Adventista Matagalpa</h1>
-        <p>Portal académico</p>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portal académico | Instituto Privado Adventista Matagalpa</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <main id="loginScreen" class="login-screen">
+    <form id="loginForm" class="login-card">
+      <div class="school-mark" aria-hidden="true">IPAM</div>
+      <p class="eyebrow">Portal académico</p>
+      <h1>Instituto Privado Adventista Matagalpa</h1>
+      <p class="muted">Ingresa con tu usuario para consultar las notas.</p>
 
-        <form id="loginForm" class="auth-form">
-          <div class="field">
-            <label for="username">Usuario</label>
-            <input id="username" type="text" value="admin" />
-          </div>
+      <label for="username">Usuario</label>
+      <input id="username" name="username" autocomplete="username"
+             placeholder="Nombre completo" required />
 
-          <div class="field">
-            <label for="password">Contraseña</label>
-            <input id="password" type="password" value="1234" />
-          </div>
+      <label for="password">Contraseña</label>
+      <input id="password" name="password" type="password"
+             autocomplete="current-password" placeholder="Contraseña" required />
 
-          <button type="submit" class="login-btn">Iniciar sesión</button>
-        </form>
+      <button class="button button-primary login-button" type="submit">
+        Iniciar sesión
+      </button>
+      <p id="loginError" class="error-message" role="alert"></p>
 
-        <div class="demo-note">Credenciales: admin / 1234</div>
+      <details class="demo-help">
+        <summary>Credenciales de demostración</summary>
+        <p>Estudiantes: escribe su nombre completo. Contraseña: <code>1234</code>.</p>
+        <p>Docentes: escribe el nombre completo del docente. Contraseña: <code>1234</code>.</p>
+        <p>Directora: <strong>Yessenia Gonzales</strong>. Contraseña: <code>1234</code>.</p>
+      </details>
+    </form>
+  </main>
+
+  <div id="appScreen" class="app hidden">
+    <header class="topbar">
+      <div class="brand">
+        <div class="school-mark school-mark-small" aria-hidden="true">IPAM</div>
+        <div>
+          <p class="eyebrow">Instituto Privado Adventista Matagalpa</p>
+          <h1>Portal de notas</h1>
+        </div>
       </div>
-    </div>
+      <div class="account">
+        <div>
+          <strong id="accountName"></strong>
+          <span id="accountRole" class="account-role"></span>
+        </div>
+        <button id="logoutBtn" class="button button-light" type="button">Cerrar sesión</button>
+      </div>
+    </header>
 
-    <div id="appScreen" class="app-shell hidden">
-      <header class="topbar">
-        <div class="topbar-row">
+    <main class="page-content">
+      <section class="welcome-row">
+        <div>
+          <p class="eyebrow">Año lectivo 2026</p>
+          <h2 id="pageHeading">Cuadro de notas</h2>
+          <p id="pageDescription" class="muted"></p>
+        </div>
+        <div id="staffControls" class="staff-controls hidden">
+          <label for="courseFilter">Curso</label>
+          <select id="courseFilter"></select>
+          <label for="studentFilter">Estudiante</label>
+          <select id="studentFilter"></select>
+        </div>
+      </section>
+
+      <section id="summaryCards" class="summary-grid" aria-label="Resumen"></section>
+
+      <section class="panel grades-panel">
+        <div class="panel-heading">
           <div>
-            <h1>Instituto Privado Adventista Matagalpa</h1>
-            <div class="topbar-sub">Sistema de control académico</div>
+            <p class="eyebrow">Registro académico</p>
+            <h2 id="studentHeading">Notas</h2>
+            <p id="studentCourse" class="muted"></p>
           </div>
-
-          <div class="topbar-badges">
-            <span class="badge">Undécimo Grado</span>
-            <span class="badge">5to Año</span>
-            <span class="badge">2026</span>
+          <div class="panel-actions">
+            <button id="saveBtn" class="button button-primary hidden" type="button">
+              Guardar cambios
+            </button>
+            <button id="printBtn" class="button button-secondary" type="button">
+              Imprimir boletín
+            </button>
           </div>
         </div>
 
-        <div class="nav">
-          <button class="nav-btn active" data-tab="dashboard">Dashboard</button>
-          <button class="nav-btn" data-tab="students">Estudiantes</button>
-          <button class="nav-btn" data-tab="teachers">Docentes</button>
-          <button class="nav-btn" data-tab="courses">Cursos</button>
-        </div>
-      </header>
+        <p id="saveMessage" class="save-message" role="status"></p>
 
-      <div class="toolbar">
-        <div class="panel search-panel">
-          <input id="searchInput" class="search-box" type="text" placeholder="Buscar estudiante por nombre..." />
-        </div>
-
-        <div class="panel filter-panel">
-          <select id="courseFilter" class="select-box">
-            <option value="Todos">Todos los cursos</option>
-            <option value="Undécimo Grado">Undécimo Grado</option>
-          </select>
-        </div>
-
-        <button id="addStudentBtn" class="primary-btn">Agregar estudiante</button>
-      </div>
-
-      <div id="dashboardTab" class="tab-section">
-        <section id="stats" class="stats"></section>
-      </div>
-
-      <div id="studentsTab" class="tab-section hidden">
-        <div class="grid-layout">
-          <aside class="panel students-panel">
-            <h2 class="panel-title">Estudiantes</h2>
-            <div id="studentList" class="student-list"></div>
-          </aside>
-
-          <section class="panel detail-panel">
-            <div id="detailPanel"></div>
-          </section>
-        </div>
-      </div>
-
-      <div id="teachersTab" class="tab-section hidden">
-        <div class="panel teacher-panel">
-          <h2 class="panel-title">Docentes</h2>
-          <div id="teacherGrid" class="teacher-grid"></div>
-        </div>
-      </div>
-
-      <div id="coursesTab" class="tab-section hidden">
-        <div class="panel courses-panel">
-          <h2 class="panel-title">Cursos y Materias</h2>
-          <div id="courseGrid" class="course-grid"></div>
-        </div>
-      </div>
-    </div>
-
-    <div id="studentModal" class="modal hidden">
-      <div class="modal-card">
-        <div class="modal-header">
-          <h3>Nuevo estudiante</h3>
-          <button type="button" class="close-btn" id="closeModalBtn">×</button>
+        <div class="table-wrap">
+          <table class="grades-table">
+            <thead>
+              <tr>
+                <th scope="col">Clase</th>
+                <th scope="col">Docente</th>
+                <th scope="col">I</th>
+                <th scope="col">II</th>
+                <th scope="col">Primer semestre</th>
+                <th scope="col">III</th>
+                <th scope="col">IV</th>
+                <th scope="col">Segundo semestre</th>
+                <th scope="col">Nota final</th>
+              </tr>
+            </thead>
+            <tbody id="gradesBody"></tbody>
+            <tfoot id="gradesFooter"></tfoot>
+          </table>
         </div>
 
-        <form id="studentForm">
-          <div class="form-grid">
-            <div class="form-field">
-              <label for="newName">Nombre</label>
-              <input id="newName" type="text" required />
-            </div>
+        <p class="grade-note">
+          Cada corte se califica sobre 50 puntos. El semestre es la suma de sus dos cortes,
+          y la nota final es el promedio de los dos semestres.
+        </p>
+      </section>
 
-            <div class="form-field">
-              <label for="newCourse">Curso</label>
-              <select id="newCourse">
-                <option value="Undécimo Grado">Undécimo Grado</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="modal-actions">
-            <button type="button" class="secondary-btn" id="cancelStudentBtn">Cancelar</button>
-            <button type="submit" class="primary-btn">Guardar</button>
-          </div>
-        </form>
-      </div>
-    </div>
-
-    <script src="script.js"></script>
-  </body>
+      <section id="staffNotice" class="notice hidden">
+        Los cambios se guardan en este navegador. Esta versión es una demostración y no
+        debe usarse para publicar notas reales.
+      </section>
+    </main>
+  </div>
+</body>
 </html>
