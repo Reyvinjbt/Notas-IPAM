@@ -221,7 +221,6 @@ function createInitialStudents() {
 function migrateStudent(student) {
   if (!student.grades) student.grades = {};
 
-  // Convierte los datos de versiones anteriores que guardaban notas en "notas".
   if (Array.isArray(student.notas)) {
     for (const oldGrade of student.notas) {
       if (!oldGrade?.materia) continue;
@@ -314,12 +313,19 @@ function studentAverage(student) {
 function qualitative(value, max) {
   const percentage = max > 0 ? (Number(value) / max) * 100 : 0;
 
-  if (percentage >= 90) return { text: "Excelente", className: "qual-excellent" };
-  if (percentage >= 80) return { text: "Muy bueno", className: "qual-very-good" };
-  if (percentage >= 70) return { text: "Bueno", className: "qual-good" };
-  if (percentage >= 60) return { text: "Básico", className: "qual-basic" };
+  if (percentage >= 90) {
+    return { text: "AA", className: "qual-aa" };
+  }
 
-  return { text: "En proceso", className: "qual-progress" };
+  if (percentage >= 76) {
+    return { text: "AS", className: "qual-as" };
+  }
+
+  if (percentage >= 60) {
+    return { text: "AF", className: "qual-af" };
+  }
+
+  return { text: "AI", className: "qual-ai" };
 }
 
 function qualitativeCell(value, max) {
