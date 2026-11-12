@@ -396,27 +396,22 @@ select {
   font-weight: 750;
 }
 
-.qual-excellent {
+.qual-aa {
   background: #dcfce7;
   color: #166534;
 }
 
-.qual-very-good {
+.qual-as {
   background: #dbeafe;
   color: #1e40af;
 }
 
-.qual-good {
-  background: #e0f2fe;
-  color: #075985;
-}
-
-.qual-basic {
+.qual-af {
   background: #fef3c7;
   color: #92400e;
 }
 
-.qual-progress {
+.qual-ai {
   background: #fee2e2;
   color: #991b1b;
 }
